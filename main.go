@@ -71,7 +71,7 @@ func requestAPI(url string) string {
 }
 
 func main() {
-	// fake api
+	// start api
 	go http.ListenAndServe(":9999", &fakeAPIHandler{})
 	go http.ListenAndServe(":9980", &apiHandler{})
 
@@ -81,10 +81,13 @@ func main() {
 
 		// trigger queue to send request
 		if len(queue) == 5 {
+			// use queue buffer
 			queueBuffer := queue[:5]
+			// iterative request fake api
 			for _, qBuffer := range queueBuffer {
 				fmt.Println(requestAPI(qBuffer))
 			}
+			// simple dequeue
 			queue = queue[5:]
 		}
 	}
